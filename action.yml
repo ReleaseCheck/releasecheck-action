@@ -1,0 +1,50 @@
+name: ReleaseCheck
+description: Run a released ReleaseCheck binary against an npm or PyPI package
+author: ReleaseCheck
+inputs:
+  ecosystem:
+    description: Registry ecosystem to verify: npm or pypi
+    required: true
+  package:
+    description: Package name
+    required: true
+  version:
+    description: Optional package version; omit to use the registry default
+    required: false
+  artifact:
+    description: Optional PyPI release filename
+    required: false
+  timeout:
+    description: ReleaseCheck operation timeout, for example 60s
+    required: false
+    default: 30s
+  releasecheck-version:
+    description: Core ReleaseCheck version to download, without the leading v
+    required: true
+  output:
+    description: Optional report path relative to the workspace
+    required: false
+    default: releasecheck-report.json
+  format:
+    description: Report format: human, json, or sarif
+    required: false
+    default: json
+outputs:
+  report:
+    description: Path to the generated report when an output path is used
+    value: ${{ steps.verify.outputs.report }}
+runs:
+  using: composite
+  steps:
+    - id: verify
+      shell: bash
+      env:
+        INPUT_ECOSYSTEM: ${{ inputs.ecosystem }}
+        INPUT_PACKAGE: ${{ inputs.package }}
+        INPUT_VERSION: ${{ inputs.version }}
+        INPUT_ARTIFACT: ${{ inputs.artifact }}
+        INPUT_TIMEOUT: ${{ inputs.timeout }}
+        INPUT_RELEASECHECK_VERSION: ${{ inputs.releasecheck-version }}
+        INPUT_OUTPUT: ${{ inputs.output }}
+        INPUT_FORMAT: ${{ inputs.format }}
+      run: bash "${{ github.action_path }}/scripts/run-releasecheck.sh"
