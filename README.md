@@ -1,16 +1,22 @@
 # ReleaseCheck GitHub Action
 
-This repository contains the official GitHub Actions integration for [ReleaseCheck](https://github.com/ReleaseCheck/releasecheck).
+![Action CI](https://github.com/ReleaseCheck/releasecheck-action/actions/workflows/ci.yml/badge.svg?branch=main) ![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
+
+Run [ReleaseCheck](https://github.com/ReleaseCheck/releasecheck) from a GitHub Actions workflow to collect release-integrity evidence for an npm or PyPI package.
+
+[Core repository](https://github.com/ReleaseCheck/releasecheck) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Action security policy](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 The Action invokes a released ReleaseCheck core binary. It does not reimplement registry metadata handling, archive inspection, source comparison, security analysis, or provenance parsing.
 
-## Current status
+## Status
 
-ReleaseCheck has not published `v0.1.0` yet. This Action repository is structurally ready for the first core release, and its local CI validates the action metadata and download/checksum command path. A live end-to-end Action run remains blocked until a matching public core release exists.
+The Action's CI passes. ReleaseCheck has not published `v0.1.0` yet, so a live end-to-end run against a public core release is not available. Phase 16 independent re-audit and release validation remain outstanding in the core project.
 
 The initial integration supports Ubuntu runners with Bash, `curl`, `tar`, and `sha256sum`. Windows and macOS runner support should be added only with tested platform-specific acquisition behavior.
 
 ## Usage
+
+The following is a preview example using the current branch. For production workflows, pin the Action to a reviewed full commit SHA once the first reviewed release is available.
 
 ```yaml
 jobs:
