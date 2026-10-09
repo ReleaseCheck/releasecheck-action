@@ -38,17 +38,44 @@ checksum_file="$cache_dir/SHA256SUMS"
 archive_file="$cache_dir/$archive"
 binary_dir="$cache_dir/releasecheck-v${version}-linux-amd64"
 binary="$binary_dir/releasecheck"
+archive_binary="releasecheck-v${version}-linux-amd64/releasecheck"
 
 if [[ ! -x "$binary" ]]; then
   curl --fail --location --proto '=https' --tlsv1.2 --silent --show-error "$base/SHA256SUMS" -o "$checksum_file"
   curl --fail --location --proto '=https' --tlsv1.2 --silent --show-error "$base/$archive" -o "$archive_file"
-  expected="$(awk -v name="$archive" '$2 == name {print $1}' "$checksum_file")"
-  if [[ -z "$expected" ]]; then echo "archive checksum is missing" >&2; exit 1; fi
+  if ! expected="$(awk -v name="$archive" '
+    {
+      entry = $2
+      sub(/^\*/, "", entry)
+    }
+    (entry == name || entry == "./" name) {
+      if (length($1) != 64 || $1 !~ /^[0-9A-Fa-f]+$/) { invalid = 1; next }
+      count++
+      value = tolower($1)
+    }
+    END {
+      if (invalid || count != 1) { exit 1 }
+      print value
+    }
+  ' "$checksum_file" 2>/dev/null)"; then
+    expected=""
+  fi
+  if [[ -z "$expected" ]]; then echo "archive checksum is missing, malformed, or ambiguous" >&2; exit 1; fi
   actual="$(sha256sum "$archive_file" | awk '{print $1}')"
   if [[ "$actual" != "$expected" ]]; then echo "archive checksum mismatch" >&2; exit 1; fi
-  rm -rf "$binary_dir"
   mkdir -p "$binary_dir"
-  tar -xzf "$archive_file" -C "$cache_dir"
+  temporary_binary="$binary_dir/.releasecheck.tmp"
+  if ! tar -xOzf "$archive_file" -- "$archive_binary" > "$temporary_binary"; then
+    rm -f "$temporary_binary"
+    echo "release archive does not contain the expected Linux binary" >&2
+    exit 1
+  fi
+  if [[ ! -s "$temporary_binary" ]]; then
+    rm -f "$temporary_binary"
+    echo "release archive contains an empty Linux binary" >&2
+    exit 1
+  fi
+  mv "$temporary_binary" "$binary"
   chmod 0755 "$binary"
 fi
 
