@@ -6,6 +6,8 @@ test -f LICENSE
 test -f scripts/run-releasecheck.sh
 grep -q 'using: composite' action.yml
 grep -q 'releasecheck-version' action.yml
+grep -q 'description: "Registry ecosystem to verify: npm or pypi"' action.yml
+grep -q 'description: "Report format: human, json, or sarif"' action.yml
 grep -q 'sha256sum' scripts/run-releasecheck.sh
 grep -q 'tar -xOzf' scripts/run-releasecheck.sh
 grep -q 'verify' scripts/run-releasecheck.sh

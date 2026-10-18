@@ -3,7 +3,7 @@ description: Run a released ReleaseCheck binary against an npm or PyPI package
 author: ReleaseCheck
 inputs:
   ecosystem:
-    description: Registry ecosystem to verify: npm or pypi
+    description: "Registry ecosystem to verify: npm or pypi"
     required: true
   package:
     description: Package name
@@ -26,7 +26,7 @@ inputs:
     required: false
     default: releasecheck-report.json
   format:
-    description: Report format: human, json, or sarif
+    description: "Report format: human, json, or sarif"
     required: false
     default: json
 outputs:
