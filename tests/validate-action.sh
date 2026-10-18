@@ -35,6 +35,9 @@ for ((index = 1; index <= $#; index++)); do
     break
   fi
 done
+if [[ "${MOCK_EXIT:-0}" != 0 ]]; then
+  exit "$MOCK_EXIT"
+fi
 EOF
 chmod 0755 "$test_root/stage/$binary_dir/releasecheck"
 tar -czf "$release_dir/$archive" -C "$test_root/stage" "$binary_dir"
@@ -81,6 +84,13 @@ write_checksum() {
 write_checksum prefixed
 run_action
 test -s "$workspace/releasecheck-report.json"
+
+rm -rf "$test_root/runner" "$workspace"
+mkdir -p "$workspace"
+if MOCK_EXIT=1 run_action >"$test_root/verifier-failure.out" 2>&1; then
+  echo 'verifier nonzero status was swallowed' >&2
+  exit 1
+fi
 
 rm -rf "$test_root/runner" "$workspace"
 mkdir -p "$workspace"
