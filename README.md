@@ -10,7 +10,7 @@ The Action invokes a released ReleaseCheck core binary. It does not reimplement 
 
 ## Status
 
-The Action's CI passes. ReleaseCheck has not published `v0.1.0` yet, so a live end-to-end run against a public core release is not available. Phase 16 independent re-audit is complete; Phase 17 hosted release validation remains outstanding in the core project.
+The Action's CI passes. ReleaseCheck has not published `v0.1.0` yet, so a live end-to-end run against a public core release is not available. Phase 16 independent re-audit is complete; Phase 17 hosted release validation remains outstanding in the core project. The manual [Action E2E workflow](.github/workflows/e2e.yml) is prepared for an authorized public core release and must not be described as passing before it is run.
 
 The initial integration supports Ubuntu runners with Bash, `curl`, `tar`, and `sha256sum`. Windows and macOS runner support should be added only with tested platform-specific acquisition behavior.
 
