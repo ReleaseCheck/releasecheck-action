@@ -68,6 +68,8 @@ run_action() {
   MOCK_RELEASE_DIR="$release_dir" \
   GITHUB_WORKSPACE="$workspace" \
   RUNNER_TEMP="$test_root/runner" \
+  RUNNER_OS=Linux \
+  RUNNER_ARCH=X64 \
   GITHUB_OUTPUT="$test_root/github-output" \
   INPUT_ECOSYSTEM=npm \
   INPUT_PACKAGE=example-package \
