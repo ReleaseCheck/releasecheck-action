@@ -37,6 +37,7 @@ runs:
   using: composite
   steps:
     - id: verify
+      if: runner.os != 'Windows'
       shell: bash
       env:
         INPUT_ECOSYSTEM: ${{ inputs.ecosystem }}
@@ -48,3 +49,16 @@ runs:
         INPUT_OUTPUT: ${{ inputs.output }}
         INPUT_FORMAT: ${{ inputs.format }}
       run: bash "${{ github.action_path }}/scripts/run-releasecheck.sh"
+    - id: verify-windows
+      if: runner.os == 'Windows'
+      shell: pwsh
+      env:
+        INPUT_ECOSYSTEM: ${{ inputs.ecosystem }}
+        INPUT_PACKAGE: ${{ inputs.package }}
+        INPUT_VERSION: ${{ inputs.version }}
+        INPUT_ARTIFACT: ${{ inputs.artifact }}
+        INPUT_TIMEOUT: ${{ inputs.timeout }}
+        INPUT_RELEASECHECK_VERSION: ${{ inputs.releasecheck-version }}
+        INPUT_OUTPUT: ${{ inputs.output }}
+        INPUT_FORMAT: ${{ inputs.format }}
+      run: '& "${{ github.action_path }}\scripts\run-releasecheck.ps1"'

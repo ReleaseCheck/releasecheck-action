@@ -33,12 +33,18 @@ mkdir -p "$GITHUB_WORKSPACE/$(dirname "$output")"
 cache_dir="${RUNNER_TEMP:-$GITHUB_WORKSPACE}/releasecheck"
 mkdir -p "$cache_dir"
 base="https://github.com/ReleaseCheck/releasecheck/releases/download/v${version}"
-archive="releasecheck-v${version}-linux-amd64.tar.gz"
+case "${RUNNER_OS:-Linux}:${RUNNER_ARCH:-X64}" in
+  Linux:X64) archive="releasecheck-v${version}-linux-amd64.tar.gz" ;;
+  Linux:ARM64) archive="releasecheck-v${version}-linux-arm64.tar.gz" ;;
+  macOS:X64) archive="releasecheck-v${version}-darwin-amd64.tar.gz" ;;
+  macOS:ARM64) archive="releasecheck-v${version}-darwin-arm64.tar.gz" ;;
+  *) echo "unsupported runner platform: ${RUNNER_OS:-unknown}/${RUNNER_ARCH:-unknown}" >&2; exit 2 ;;
+esac
 checksum_file="$cache_dir/SHA256SUMS"
 archive_file="$cache_dir/$archive"
-binary_dir="$cache_dir/releasecheck-v${version}-linux-amd64"
+binary_dir="$cache_dir/${archive%.tar.gz}"
 binary="$binary_dir/releasecheck"
-archive_binary="releasecheck-v${version}-linux-amd64/releasecheck"
+archive_binary="${archive%.tar.gz}/releasecheck"
 
 if [[ ! -x "$binary" ]]; then
   curl --fail --location --proto '=https' --tlsv1.2 --silent --show-error "$base/SHA256SUMS" -o "$checksum_file"
@@ -61,7 +67,11 @@ if [[ ! -x "$binary" ]]; then
     expected=""
   fi
   if [[ -z "$expected" ]]; then echo "archive checksum is missing, malformed, or ambiguous" >&2; exit 1; fi
-  actual="$(sha256sum "$archive_file" | awk '{print $1}')"
+  if command -v sha256sum >/dev/null 2>&1; then
+    actual="$(sha256sum "$archive_file" | awk '{print $1}')"
+  else
+    actual="$(shasum -a 256 "$archive_file" | awk '{print $1}')"
+  fi
   if [[ "$actual" != "$expected" ]]; then echo "archive checksum mismatch" >&2; exit 1; fi
   mkdir -p "$binary_dir"
   temporary_binary="$binary_dir/.releasecheck.tmp"

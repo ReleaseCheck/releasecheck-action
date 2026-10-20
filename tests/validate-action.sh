@@ -4,6 +4,7 @@ set -euo pipefail
 test -f action.yml
 test -f LICENSE
 test -f scripts/run-releasecheck.sh
+test -f scripts/run-releasecheck.ps1
 grep -q 'using: composite' action.yml
 grep -q 'releasecheck-version' action.yml
 grep -q 'description: "Registry ecosystem to verify: npm or pypi"' action.yml
@@ -11,6 +12,8 @@ grep -q 'description: "Report format: human, json, or sarif"' action.yml
 grep -q 'sha256sum' scripts/run-releasecheck.sh
 grep -q 'tar -xOzf' scripts/run-releasecheck.sh
 grep -q 'verify' scripts/run-releasecheck.sh
+grep -q "runner.os == 'Windows'" action.yml
+grep -q 'run-releasecheck.ps1' action.yml
 if grep -Eq 'npm install|pip install|curl.*\|.*sh|eval ' scripts/run-releasecheck.sh; then
   echo 'unsafe installation or shell execution found' >&2
   exit 1

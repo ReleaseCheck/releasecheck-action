@@ -12,7 +12,7 @@ The Action invokes a released ReleaseCheck core binary. It does not reimplement 
 
 The Action's CI passes. ReleaseCheck `v0.1.2` is publicly released, and the manual [Action E2E workflow](.github/workflows/e2e.yml) has passed against that exact core release. The workflow run is recorded in the core repository's release documentation. This repository remains Ubuntu-oriented until tested platform-specific acquisition is added.
 
-The initial integration supports Ubuntu runners with Bash, `curl`, `tar`, and `sha256sum`. Windows and macOS runner support should be added only with tested platform-specific acquisition behavior.
+The Action supports Ubuntu and macOS runners through Bash plus Windows runners through PowerShell. Linux/macOS use `curl`, `tar`, and SHA-256 tooling; Windows uses PowerShell HTTPS, SHA-256, and ZIP APIs. Supported release targets are Linux amd64/arm64, macOS amd64/arm64, and Windows amd64.
 
 ## Usage
 
@@ -32,7 +32,7 @@ jobs:
           output: releasecheck.sarif
 ```
 
-The `releasecheck-version` input is required and must be an explicit semantic version. The Action downloads the matching Linux amd64 archive from the core release and verifies its SHA-256 checksum before execution. The public v0.1.2 core release has been exercised through the Action E2E workflow; pin a reviewed Action commit for production use.
+The `releasecheck-version` input is required and must be an explicit semantic version. The Action selects the matching archive for the runner platform and verifies its SHA-256 checksum before execution. The public v0.1.2 core release has been exercised through the Action E2E workflow; pin a reviewed Action commit for production use.
 
 Inputs:
 
