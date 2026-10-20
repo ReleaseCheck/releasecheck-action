@@ -10,7 +10,7 @@ The Action invokes a released ReleaseCheck core binary. It does not reimplement 
 
 ## Status
 
-The Action's CI passes. ReleaseCheck `v0.1.2` is publicly released, and the manual [Action E2E workflow](.github/workflows/e2e.yml) has passed against that exact core release. The workflow run is recorded in the core repository's release documentation. This repository remains Ubuntu-oriented until tested platform-specific acquisition is added.
+The Action's CI passes. ReleaseCheck `v0.1.2` is publicly released, and the manual [Action E2E workflow](.github/workflows/e2e.yml) has passed against that exact core release. The workflow run is recorded in the core repository's release documentation. The cross-platform acquisition path is covered by the repository's Ubuntu, macOS, and Windows CI jobs.
 
 The Action supports Ubuntu and macOS runners through Bash plus Windows runners through PowerShell. Linux/macOS use `curl`, `tar`, and SHA-256 tooling; Windows uses PowerShell HTTPS, SHA-256, and ZIP APIs. Supported release targets are Linux amd64/arm64, macOS amd64/arm64, and Windows amd64.
 
