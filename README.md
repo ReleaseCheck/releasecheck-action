@@ -10,13 +10,13 @@ The Action invokes a released ReleaseCheck core binary. It does not reimplement 
 
 ## Status
 
-The Action's CI passes. ReleaseCheck has not published `v0.1.0` yet, so a live end-to-end run against a public core release is not available. Phase 16 independent re-audit is complete; Phase 17 hosted release validation remains outstanding in the core project. The manual [Action E2E workflow](.github/workflows/e2e.yml) is prepared for an authorized public core release and must not be described as passing before it is run.
+The Action's CI passes. ReleaseCheck `v0.1.2` is publicly released, and the manual [Action E2E workflow](.github/workflows/e2e.yml) has passed against that exact core release. The workflow run is recorded in the core repository's release documentation. This repository remains Ubuntu-oriented until tested platform-specific acquisition is added.
 
 The initial integration supports Ubuntu runners with Bash, `curl`, `tar`, and `sha256sum`. Windows and macOS runner support should be added only with tested platform-specific acquisition behavior.
 
 ## Usage
 
-The following is a preview example using the current branch. For production workflows, pin the Action to a reviewed full commit SHA once the first reviewed release is available.
+The following example uses the public Action repository for readability. For production workflows, pin the Action to a reviewed full commit SHA and keep the core version explicit.
 
 ```yaml
 jobs:
@@ -27,12 +27,12 @@ jobs:
         with:
           ecosystem: npm
           package: example-package
-          releasecheck-version: 0.1.0
+          releasecheck-version: 0.1.2
           format: sarif
           output: releasecheck.sarif
 ```
 
-Use a released Action tag or commit in production after the first release. The `releasecheck-version` input is required and must be an explicit semantic version. The Action downloads the matching Linux amd64 archive from the core release and verifies its SHA-256 checksum before execution.
+The `releasecheck-version` input is required and must be an explicit semantic version. The Action downloads the matching Linux amd64 archive from the core release and verifies its SHA-256 checksum before execution. The public v0.1.2 core release has been exercised through the Action E2E workflow; pin a reviewed Action commit for production use.
 
 Inputs:
 
@@ -59,4 +59,4 @@ For actual verification semantics and limitations, read the [core README](https:
 bash tests/validate-action.sh
 ```
 
-Do not claim end-to-end success until a public core release has been published and tested through the Action.
+Keep the core version explicit and do not treat a successful Action run as proof that the inspected package is safe or that source and artifact are byte-for-byte equivalent.
