@@ -1,8 +1,15 @@
-# ReleaseCheck GitHub Action
+<p align="center">
+  <img src="docs/assets/releasecheck-action-banner.png" alt="ReleaseCheck Action: release integrity checks in CI" width="100%">
+</p>
 
-![Action CI](https://github.com/ReleaseCheck/releasecheck-action/actions/workflows/ci.yml/badge.svg?branch=main) ![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
+<p align="center">
+  Run <a href="https://github.com/ReleaseCheck/releasecheck">ReleaseCheck</a> from GitHub Actions to collect release-integrity evidence for an npm or PyPI package.
+</p>
 
-Run [ReleaseCheck](https://github.com/ReleaseCheck/releasecheck) from a GitHub Actions workflow to collect release-integrity evidence for an npm or PyPI package.
+<p align="center">
+  <a href="https://github.com/ReleaseCheck/releasecheck-action/actions/workflows/ci.yml"><img src="https://github.com/ReleaseCheck/releasecheck-action/actions/workflows/ci.yml/badge.svg?branch=main" alt="Action CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="Apache-2.0 license"></a>
+</p>
 
 [Core repository](https://github.com/ReleaseCheck/releasecheck) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Action security policy](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
